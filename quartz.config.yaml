@@ -70,8 +70,8 @@ plugins:
     enabled: true
     order: 50
     layout:
-      position: beforeBody
-      priority: 30
+      position: right
+      priority: 10
       condition: has-toc
   - source: github:quartz-community/crawl-links
     enabled: true

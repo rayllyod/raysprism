@@ -215,21 +215,88 @@ blockquote,
 // declarations beat base.scss at every breakpoint without extra specificity.
 // ============================================================================
 
-// --- Re-template the page grid: top bar row, then one column ---
+// --- Re-template the page grid: top bar row, then a three-column row
+// where the article sits center and the TOC hangs in the left margin,
+// gwern-style. Symmetric 1fr outer columns keep the prose page-centered. ---
 .page > #quartz-body {
-  grid-template-columns: 100%;
-  grid-template-rows: auto auto auto auto;
+  grid-template-columns: 1fr minmax(0, 42rem) 1fr;
+  grid-template-rows: auto auto auto;
   grid-template-areas:
-    "grid-sidebar-left"
-    "grid-header"
-    "grid-center"
-    "grid-footer";
+    "grid-sidebar-left grid-sidebar-left grid-sidebar-left"
+    "grid-sidebar-right grid-center ."
+    "grid-footer grid-footer grid-footer";
+
+  // Under 1200px there's no room for a margin rail: stack the TOC as a
+  // full-width box between the top bar and the article instead.
+  @media all and not ($desktop) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "grid-sidebar-left"
+      "grid-sidebar-right"
+      "grid-center"
+      "grid-footer";
+  }
+
+  // main.center is the actual grid item (the title block and article are
+  // its children, not grid items themselves) — without an explicit area it
+  // auto-places into the first free cell, i.e. the left rail column.
+  & > .center {
+    grid-area: grid-center;
+  }
 }
 
-// Right sidebar is empty on every page type now (graph/toc/backlinks/similar
-// all moved); its grid area no longer exists, so remove it from flow.
+// The old right sidebar container now renders the left margin rail (TOC).
+// On TOC-less pages it's an empty div in an empty grid cell — invisible.
 .page > #quartz-body > .sidebar.right {
-  display: none;
+  display: flex;
+  flex-direction: column;
+  position: static;
+  height: auto;
+  width: 13rem;
+  max-width: 100%;
+  padding: 0 1.75rem 0 0;
+  margin: 0;
+  box-sizing: border-box;
+  justify-self: end;
+
+  & > .toc {
+    display: block;
+    flex: none;
+    position: sticky;
+    top: 1.5rem;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+  }
+
+  @media all and not ($desktop) {
+    justify-self: stretch;
+    width: 100%;
+    max-width: 70ch;
+    margin: 0 auto;
+    padding: 0;
+
+    & > .toc {
+      position: static;
+      max-height: none;
+    }
+  }
+}
+
+// The TOC box itself, wherever it lands: compact bordered "Contents" panel
+.page[data-frame="default"] .toc {
+  border: 1px solid var(--lightgray);
+  border-radius: 4px;
+  padding: 0.5rem 0.9rem;
+  background-color: color-mix(in srgb, var(--lightgray) 25%, transparent);
+  font-size: 0.85rem;
+}
+
+// --- Gwern-style sectioning: top-level section headings carry a
+// full-measure hairline underline ---
+.page[data-frame="default"] .center > article :is(h1, h2) {
+  border-bottom: 1px solid var(--lightgray);
+  padding-bottom: 0.25rem;
 }
 
 // --- The top bar itself: site title centered on its own row, then
@@ -272,15 +339,6 @@ blockquote,
 // under a top bar that reads as a hole, tighten it ---
 .page[data-frame="default"] .page-header {
   margin-top: 2.5rem;
-}
-
-// --- TOC as a bordered "Contents" box between metadata and prose ---
-.page[data-frame="default"] .page-header .toc {
-  border: 1px solid var(--lightgray);
-  border-radius: 4px;
-  padding: 0.5rem 1rem;
-  margin-top: 1rem;
-  background-color: color-mix(in srgb, var(--lightgray) 25%, transparent);
 }
 
 // --- Below-article sections (backlinks, similar, graph), gwern-style:
