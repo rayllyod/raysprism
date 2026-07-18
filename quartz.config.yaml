@@ -70,8 +70,9 @@ plugins:
     enabled: true
     order: 50
     layout:
-      position: right
+      position: beforeBody
       priority: 30
+      condition: has-toc
   - source: github:quartz-community/crawl-links
     enabled: true
     options:
@@ -149,15 +150,20 @@ plugins:
   - source: github:quartz-community/tag-page
     enabled: true
   - source: github:quartz-community/explorer
-    enabled: true
+    enabled: false
     layout:
       position: left
       priority: 50
+  - source: ./plugins/top-nav
+    enabled: true
+    layout:
+      position: left
+      priority: 15
   - source: github:quartz-community/graph
     enabled: true
     layout:
-      position: right
-      priority: 10
+      position: afterBody
+      priority: 30
   - source: github:quartz-community/search
     enabled: true
     layout:
@@ -169,8 +175,8 @@ plugins:
   - source: github:quartz-community/backlinks
     enabled: true
     layout:
-      position: right
-      priority: 50
+      position: afterBody
+      priority: 10
   - source: github:quartz-community/article-title
     enabled: true
     layout:
@@ -262,8 +268,8 @@ plugins:
   - source: ./plugins/similar-links
     enabled: true
     layout:
-      position: right
-      priority: 60
+      position: afterBody
+      priority: 20
 layout:
   groups:
     toolbar:

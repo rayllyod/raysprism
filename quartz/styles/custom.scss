@@ -208,6 +208,121 @@ blockquote,
     border-color 0.3s ease;
 }
 
+// ============================================================================
+// Gwern-style layout: full-width top bar, single centered column,
+// backlinks/similar/graph as sections below the article.
+// custom.scss is emitted UNLAYERED after `@layer quartz-base`, so these
+// declarations beat base.scss at every breakpoint without extra specificity.
+// ============================================================================
+
+// --- Re-template the page grid: top bar row, then one column ---
+.page > #quartz-body {
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas:
+    "grid-sidebar-left"
+    "grid-header"
+    "grid-center"
+    "grid-footer";
+}
+
+// Right sidebar is empty on every page type now (graph/toc/backlinks/similar
+// all moved); its grid area no longer exists, so remove it from flow.
+.page > #quartz-body > .sidebar.right {
+  display: none;
+}
+
+// --- The top bar itself: site title centered on its own row, then
+// nav links + search/theme/reader tools on a second centered row ---
+.page > #quartz-body > .sidebar.left {
+  position: static;
+  height: auto;
+  z-index: 2;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem 1.6rem;
+  padding: 2.25rem 2rem 1rem 2rem;
+  border-bottom: 1px solid var(--lightgray);
+
+  // the mobile-only spacer makes no sense inside a centered bar
+  & .spacer {
+    display: none;
+  }
+}
+
+// Site title: uppercase, wide-tracked, gwern-masthead style
+.page-title {
+  flex-basis: 100%;
+  text-align: center;
+  margin: 0;
+  font-family: var(--headerFont);
+  font-size: 1.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em; // optically re-center: offsets the trailing tracking
+
+  a {
+    color: var(--dark);
+    background-color: transparent;
+  }
+}
+
+// --- Title/meta block: the old side-nav layout pushed it down 6rem;
+// under a top bar that reads as a hole, tighten it ---
+.page[data-frame="default"] .page-header {
+  margin-top: 2.5rem;
+}
+
+// --- TOC as a bordered "Contents" box between metadata and prose ---
+.page[data-frame="default"] .page-header .toc {
+  border: 1px solid var(--lightgray);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  background-color: color-mix(in srgb, var(--lightgray) 25%, transparent);
+}
+
+// --- Below-article sections (backlinks, similar, graph), gwern-style:
+// same measure as the prose, small-caps section headings ---
+.page[data-frame="default"] .center > .page-footer {
+  width: 100%;
+  max-width: 70ch;
+  margin: 2.5rem auto 0 auto;
+  box-sizing: border-box;
+
+  & > * {
+    margin-top: 1.75rem;
+  }
+
+  h3 {
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    font-weight: $semiBoldWeight;
+    font-size: 1rem;
+    color: var(--gray);
+    border-bottom: 1px solid var(--lightgray);
+    padding-bottom: 0.3rem;
+    margin: 0 0 0.6rem 0;
+  }
+
+  // these lists were sized for a cramped sidebar; let them breathe here
+  .overflow {
+    max-height: none;
+  }
+}
+
+// --- Site footer: centered, quiet ---
+.page footer {
+  text-align: center;
+  margin: 2.5rem 0 1.5rem 0;
+
+  p {
+    color: var(--gray);
+    font-size: 0.85rem;
+  }
+}
+
 // --- Quiet, theme-aware scrollbar ---
 html {
   scrollbar-color: var(--lightgray) transparent;
