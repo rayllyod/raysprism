@@ -6,7 +6,7 @@ configuration:
   enablePopovers: true
   analytics: null
   locale: en-US
-  baseUrl: prism.9shrey.workers.dev
+  baseUrl: raysprism.rayllyod2.workers.dev
   ignorePatterns:
     - private
     - templates
