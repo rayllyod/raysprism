@@ -1,0 +1,99 @@
+@use "./variables.scss" as *;
+
+// put your custom CSS here!
+
+// ============================================================================
+// Dense, book-like typography (see NOTES.md Phase 3)
+// ============================================================================
+
+// Measure: constrain prose + title/meta header to ~70ch on the default frame
+// only (full-width/minimal frames, e.g. canvas, opt out on purpose).
+.page[data-frame="default"] .page-header,
+.page[data-frame="default"] .center > article {
+  max-width: 70ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Body copy size/leading, applied to prose only so sidebar/UI chrome (which
+// share the same h1-h6 elements in the explorer/graph headings) is untouched.
+.page[data-frame="default"] .center > article .markdown-preview-view {
+  font-size: 1.1875rem; // ~19px
+  line-height: 1.55;
+}
+
+.page[data-frame="default"] .center > article .markdown-preview-view p {
+  margin-top: 0.67rem;
+  margin-bottom: 0.67rem;
+  text-align: justify;
+  hyphens: auto;
+
+  @media all and ($mobile) {
+    text-align: left;
+    hyphens: manual;
+  }
+}
+
+// Reduce vertical whitespace between sections by roughly a third. Scoped to
+// article headings so sidebar headings (Explorer, Graph View, page-title)
+// keep their own spacing.
+.page[data-frame="default"] .center > article :is(h1, h2, h3, h4, h5, h6) {
+  margin-bottom: 0.67rem;
+}
+.page[data-frame="default"] .center > article h1 {
+  margin-top: 1.5rem;
+}
+.page[data-frame="default"] .center > article h2 {
+  margin-top: 1.27rem;
+}
+.page[data-frame="default"] .center > article h3 {
+  margin-top: 1.08rem;
+}
+.page[data-frame="default"] .center > article :is(h4, h5, h6) {
+  margin-top: 1rem;
+}
+
+// Links: underlined with a thin offset underline, not the default pill
+// background, not underline-on-hover-only. Scoped to actual content areas
+// (prose, backlinks, footer) so sidebar/explorer/search chrome is untouched.
+.popover-hint a,
+.backlinks a,
+footer a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+
+  &.tag-link,
+  &:has(> img) {
+    text-decoration: none;
+  }
+}
+
+// Drop cap on the first paragraph of essays/ pages only.
+body[data-slug^="essays/"]
+  .page[data-frame="default"]
+  .center
+  > article
+  .markdown-preview-view
+  > p:first-of-type::first-letter {
+  font-family: var(--headerFont);
+  float: left;
+  font-size: 3.2em;
+  line-height: 0.85;
+  padding-right: 0.08em;
+  padding-top: 0.05em;
+  font-weight: $boldWeight;
+  color: var(--secondary);
+}
+
+// Small-caps metadata header (native ContentMeta line + the custom
+// essay-meta component added in Phase 4).
+.content-meta,
+.essay-meta {
+  font-variant: small-caps;
+  letter-spacing: 0.02em;
+  color: var(--gray);
+}

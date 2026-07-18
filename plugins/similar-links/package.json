@@ -1,0 +1,61 @@
+{
+  "name": "similar-links",
+  "version": "1.0.0",
+  "description": "Build-time TF-IDF similar-pages sidebar component.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "preact": "^10.0.0"
+  },
+  "dependencies": {
+    "@quartz-community/types": "github:quartz-community/types",
+    "@quartz-community/utils": "github:quartz-community/utils"
+  },
+  "devDependencies": {
+    "preact": "^10.28.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10.9.2"
+  },
+  "quartz": {
+    "name": "similar-links",
+    "displayName": "Similar Links",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultEnabled": true,
+    "defaultOptions": {
+      "minWordCount": 200,
+      "topN": 5
+    },
+    "components": {
+      "Similar": {
+        "displayName": "Similar",
+        "defaultPosition": "right",
+        "defaultPriority": 60
+      }
+    }
+  }
+}
