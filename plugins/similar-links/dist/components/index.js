@@ -222,9 +222,6 @@ var Similar = ({
   }
   scored.sort((a2, b2) => b2.score - a2.score);
   const top = scored.slice(0, TOP_N);
-  console.log(
-    `[similar-links] ${currentSlug}: ${top.length > 0 ? top.map((t2) => `${t2.slug} (${t2.score.toFixed(3)})`).join(", ") : "(none)"}`
-  );
   if (top.length === 0) return null;
   return /* @__PURE__ */ u2("div", { class: displayClass ? `similar-links ${displayClass}` : "similar-links", children: [
     /* @__PURE__ */ u2("h3", { children: "Similar" }),

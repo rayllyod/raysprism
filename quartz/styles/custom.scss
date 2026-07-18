@@ -72,8 +72,8 @@ footer a {
   }
 }
 
-// Drop cap on the first paragraph of essays/ pages only.
-body[data-slug^="essays/"]
+// Drop cap on the first paragraph of essays/ and experiments/ pages only.
+body:is([data-slug^="essays/"], [data-slug^="experiments/"])
   .page[data-frame="default"]
   .center
   > article
@@ -96,4 +96,136 @@ body[data-slug^="essays/"]
   font-variant: small-caps;
   letter-spacing: 0.02em;
   color: var(--gray);
+}
+
+// ============================================================================
+// Refined-book design layer
+// ============================================================================
+
+// --- Color-coded status/confidence badges (classes emitted by essay-meta) ---
+// Hairline pill, colored along each ladder using theme accents so both
+// modes stay in palette: status walks gray → rust → ochre → green; confidence
+// fades from gray up to full green as certainty rises.
+.essay-meta .meta-badge {
+  display: inline-block;
+  padding: 0 0.4em;
+  border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  border-radius: 4px;
+  line-height: 1.4;
+
+  &.status-notes {
+    color: var(--gray);
+  }
+  &.status-draft {
+    color: var(--secondary);
+  }
+  &.status-in-progress {
+    color: color-mix(in srgb, var(--secondary) 50%, var(--tertiary));
+  }
+  &.status-finished {
+    color: var(--tertiary);
+  }
+
+  &.confidence-log {
+    color: var(--gray);
+  }
+  &.confidence-unlikely {
+    color: color-mix(in srgb, var(--tertiary) 25%, var(--gray));
+  }
+  &.confidence-possible {
+    color: color-mix(in srgb, var(--tertiary) 45%, var(--gray));
+  }
+  &.confidence-likely {
+    color: color-mix(in srgb, var(--tertiary) 65%, var(--gray));
+  }
+  &.confidence-highly-likely {
+    color: color-mix(in srgb, var(--tertiary) 85%, var(--gray));
+  }
+  &.confidence-certain {
+    color: var(--tertiary);
+  }
+}
+
+// --- Hairline under the title/meta block, before the prose starts ---
+.page[data-frame="default"] .page-header {
+  border-bottom: 1px solid var(--lightgray);
+  padding-bottom: 0.75rem;
+}
+
+// --- Ornamental section dividers: fleuron instead of a bare rule ---
+.page[data-frame="default"] .center > article hr {
+  height: auto;
+  background: transparent;
+  text-align: center;
+  overflow: visible;
+  margin: 2.25rem auto;
+
+  &::before {
+    content: "❦";
+    color: var(--gray);
+    font-size: 1.05rem;
+    letter-spacing: 0.6em;
+    // optical centering: the fleuron leans left, nudge past the letter-spacing
+    padding-left: 0.6em;
+  }
+}
+
+// --- Animated link underlines: faint underline that inks in on hover ---
+.popover-hint a,
+.backlinks a,
+footer a {
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  transition:
+    text-decoration-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+// --- Subtle paper grain, layered over the theme background color ---
+// Black fractal noise at ~3% alpha: reads as paper tooth on the light theme
+// and disappears politely into the dark one.
+body {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='128' height='128' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+// --- Smooth theme switching ---
+// Scoped to the big color surfaces rather than *, so the toggle cross-fades
+// without taxing every node on the page.
+body,
+.sidebar,
+article,
+pre,
+code,
+blockquote,
+.page-header {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+// --- Quiet, theme-aware scrollbar ---
+html {
+  scrollbar-color: var(--lightgray) transparent;
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--lightgray);
+  border-radius: 5px;
+  border: 2px solid var(--light);
+
+  &:hover {
+    background: var(--gray);
+  }
 }

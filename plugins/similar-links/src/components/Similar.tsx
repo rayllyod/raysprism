@@ -72,12 +72,6 @@ const Similar: QuartzComponent = ({
   scored.sort((a, b) => b.score - a.score);
   const top = scored.slice(0, TOP_N);
 
-  console.log(
-    `[similar-links] ${currentSlug}: ${
-      top.length > 0 ? top.map((t) => `${t.slug} (${t.score.toFixed(3)})`).join(", ") : "(none)"
-    }`,
-  );
-
   if (top.length === 0) return null;
 
   return (

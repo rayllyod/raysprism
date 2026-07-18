@@ -37,7 +37,7 @@ function formatDate(d: unknown): string | undefined {
 
 const EssayMeta: QuartzComponent = ({ fileData, allFiles }: QuartzComponentProps) => {
   const slug = fileData.slug as string | undefined;
-  if (!slug || !slug.startsWith("essays/")) {
+  if (!slug || !(slug.startsWith("essays/") || slug.startsWith("experiments/"))) {
     return null;
   }
 
@@ -58,11 +58,19 @@ const EssayMeta: QuartzComponent = ({ fileData, allFiles }: QuartzComponentProps
   if (modified) items.push(`modified ${modified}`);
 
   if (frontmatter.status) {
-    items.push(<span title={STATUS_SCALE}>{frontmatter.status}</span>);
+    items.push(
+      <span class={`meta-badge status-${frontmatter.status}`} title={STATUS_SCALE}>
+        {frontmatter.status}
+      </span>,
+    );
   }
 
   if (frontmatter.confidence) {
-    items.push(<span title={CONFIDENCE_SCALE}>{frontmatter.confidence}</span>);
+    items.push(
+      <span class={`meta-badge confidence-${frontmatter.confidence}`} title={CONFIDENCE_SCALE}>
+        {frontmatter.confidence}
+      </span>,
+    );
   }
 
   if (typeof frontmatter.importance === "number") {

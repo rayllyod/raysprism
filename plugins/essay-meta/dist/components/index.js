@@ -56,7 +56,7 @@ function formatDate(d2) {
 }
 var EssayMeta = ({ fileData, allFiles }) => {
   const slug2 = fileData.slug;
-  if (!slug2 || !slug2.startsWith("essays/")) {
+  if (!slug2 || !(slug2.startsWith("essays/") || slug2.startsWith("experiments/"))) {
     return null;
   }
   const frontmatter = fileData.frontmatter ?? {};
@@ -71,10 +71,14 @@ var EssayMeta = ({ fileData, allFiles }) => {
   const modified = formatDate(dates?.modified);
   if (modified) items.push(`modified ${modified}`);
   if (frontmatter.status) {
-    items.push(/* @__PURE__ */ u2("span", { title: STATUS_SCALE, children: frontmatter.status }));
+    items.push(
+      /* @__PURE__ */ u2("span", { class: `meta-badge status-${frontmatter.status}`, title: STATUS_SCALE, children: frontmatter.status })
+    );
   }
   if (frontmatter.confidence) {
-    items.push(/* @__PURE__ */ u2("span", { title: CONFIDENCE_SCALE, children: frontmatter.confidence }));
+    items.push(
+      /* @__PURE__ */ u2("span", { class: `meta-badge confidence-${frontmatter.confidence}`, title: CONFIDENCE_SCALE, children: frontmatter.confidence })
+    );
   }
   if (typeof frontmatter.importance === "number") {
     items.push(`importance ${frontmatter.importance}`);
