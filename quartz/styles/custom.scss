@@ -402,3 +402,29 @@ html {
     background: var(--gray);
   }
 }
+
+// ============================================================================
+// Reader mode, redefined for the top-bar layout
+// ============================================================================
+// The reader-mode plugin's own CSS just fades `.sidebar.left`/`.sidebar.right`
+// to opacity:0 with a `:hover { opacity: 1 }` escape hatch — a leftover from
+// when those were empty-space side columns. Now `.sidebar.left` IS the top
+// bar, and the toggle button lives inside it, so your cursor is still
+// sitting on the button you just clicked and the hover rule instantly
+// un-fades it. Net effect: looks like the button does nothing.
+// custom.scss is unlayered and the plugin's CSS is layered, so this wins
+// outright and replaces that behavior with something that actually reads as
+// "distraction-free": drop the nav links and the search toggle, keep the
+// masthead and the dark-mode/reader-mode buttons reachable so you can
+// always get back.
+:root[reader-mode="on"] {
+  .sidebar.left,
+  .sidebar.right {
+    opacity: 1;
+  }
+
+  .top-nav,
+  .search-button {
+    display: none;
+  }
+}
