@@ -19,5 +19,16 @@ if [[ -n "$(git status --porcelain)" ]]; then
 fi
 
 # Push whatever is committed but not yet on origin (no-op when up to date).
-# If tonight's push fails (e.g. offline), tomorrow's run picks the commits up.
-git push origin v5
+# Persistent=true replays a missed 02:00 run at next login/boot, which can
+# race Wi-Fi reconnecting after sleep -- retry for a couple of minutes
+# before giving up. If still offline after that, the timer's next scheduled
+# fire (or the next login catch-up) will pick these commits up.
+for attempt in 1 2 3 4 5 6; do
+  if git push origin v5; then
+    exit 0
+  fi
+  sleep 20
+done
+
+echo "nightly-publish: push failed after retries, will retry on next run" >&2
+exit 1
